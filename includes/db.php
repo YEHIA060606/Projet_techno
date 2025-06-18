@@ -1,1 +1,4 @@
-<?php $pdo = new PDO('mysql:host=localhost;dbname=tado_app;charset=utf8', 'root', ''); $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); ?>
+<?php
+$pdo = new PDO('mysql:host=localhost;dbname=tado_app;charset=utf8', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+?>
