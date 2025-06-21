@@ -11,6 +11,7 @@ $cats = $pdo->prepare("SELECT * FROM categories WHERE user_id = ?");
 $cats->execute([$_SESSION['user_id']]);
 $categories = $cats->fetchAll();
 ?>
+<link href='style.css' rel='stylesheet'>
 <div class="container py-5">
 <h3>Catégories</h3>
 <form method="POST" class="input-group mb-3 w-50">

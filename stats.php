@@ -24,6 +24,7 @@ while ($row = $stmt->fetch()) {
     <title>Statistiques</title>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
     <script src='https://canvasjs.com/assets/script/canvasjs.min.js'></script>
+    <link href='style.css' rel='stylesheet'>
 </head>
 <body class='bg-light'>
 

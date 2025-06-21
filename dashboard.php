@@ -44,7 +44,7 @@ $todos = $stmt->fetchAll();
 </head>
 <body>
 <div class="container py-5">
-    <h2 class="mb-4 text-center text-primary">Tableau de bord - Mes Tâches</h2>
+    <h2 class="mb-4 text-center ">Tableau de bord - Mes Tâches</h2>
 
     <?php if (count($todos) === 0): ?>
         <div class="alert alert-warning text-center">Aucune tâche trouvée.</div>
