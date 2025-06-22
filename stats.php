@@ -17,57 +17,69 @@ while ($row = $stmt->fetch()) {
     $data[] = $row;
 }
 ?>
+
 <!DOCTYPE html>
-<html lang='fr'>
+<html lang="fr">
 <head>
-    <meta charset='UTF-8'>
+    <meta charset="UTF-8">
     <title>Statistiques</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
-    <script src='https://canvasjs.com/assets/script/canvasjs.min.js'></script>
-    <link href='style.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
-<body class='bg-light'>
+<body class="bg-light">
 
 <?php include 'includes/navbar.php'; ?>
 
-<div class='container py-4'>
-    <h3 class='mb-4'>Statistiques des tâches par catégorie</h3>
+<div class="container py-5">
+    <h3 class="mb-4 text-center"><i class="bi bi-pie-chart-fill me-2"></i>Statistiques des tâches par catégorie</h3>
 
-    <!-- Zone graphique + légende -->
-    <div style="display: flex; gap: 50px; align-items: center; justify-content: center;">
+    <?php if ($totalTasks === 0): ?>
+        <div class="alert alert-info text-center"><i class="bi bi-info-circle"></i> Aucune tâche enregistrée pour générer des statistiques.</div>
+    <?php else: ?>
+        <div class="row align-items-center justify-content-center">
+            <!-- Graphique -->
+            <div class="col-md-6 mb-4">
+                <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+            </div>
 
-        <!-- Graphique -->
-        <div id='chartContainer' style='height: 370px; width: 50%;'></div>
-
-        <!-- Légende dynamique -->
-        <div style='font-size: 18px;'>
-            <?php
-            // Palette de couleurs (à synchroniser avec CanvasJS si nécessaire)
-            $colors = ['#2ecc71', '#3498db', '#f1c40f', '#e67e22', '#9b59b6', '#e74c3c'];
-            $i = 0;
-            foreach ($data as $row):
-                $pourcentage = $totalTasks > 0 ? round(($row['total'] / $totalTasks) * 100) : 0;
-                $color = $colors[$i % count($colors)];
-            ?>
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <div style="width: 20px; height: 20px; background-color: <?= $color ?>; margin-right: 10px;"></div>
-                    <?= htmlspecialchars($row['category']) ?> : <?= $pourcentage ?>%
+            <!-- Légende -->
+            <div class="col-md-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Répartition (%)</h5>
+                        <?php
+                        $colors = ['#2ecc71', '#3498db', '#f1c40f', '#e67e22', '#9b59b6', '#e74c3c'];
+                        $i = 0;
+                        foreach ($data as $row):
+                            $pourcentage = round(($row['total'] / $totalTasks) * 100);
+                            $color = $colors[$i % count($colors)];
+                        ?>
+                            <div class="d-flex align-items-center mb-2">
+                                <div style="width: 16px; height: 16px; background-color: <?= $color ?>; margin-right: 10px;"></div>
+                                <?= htmlspecialchars($row['category']) ?> : <strong><?= $pourcentage ?>%</strong>
+                            </div>
+                        <?php $i++; endforeach; ?>
+                        <hr>
+                        <div class="text-muted">Total : <?= $totalTasks ?> tâche<?= $totalTasks > 1 ? 's' : '' ?></div>
+                    </div>
                 </div>
-            <?php $i++; endforeach; ?>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
 </div>
 
 <script>
 window.onload = function () {
-    var chart = new CanvasJS.Chart('chartContainer', {
+    var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
-        theme: 'light2',
-        title: { text: 'Répartition des tâches' },
+        theme: "light2",
+        title: { text: "Répartition des tâches" },
         data: [{
-            type: 'pie',
-            indexLabel: '{label} - {y}',
-            yValueFormatString: '#,##0',
+            type: "pie",
+            indexLabel: "{label} - {y}",
+            yValueFormatString: "#,##0",
             dataPoints: [
                 <?php foreach ($data as $row): ?>
                 { y: <?= $row['total'] ?>, label: "<?= addslashes($row['category']) ?>" },
