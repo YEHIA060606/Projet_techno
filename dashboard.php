@@ -68,7 +68,7 @@ $todos = $stmt->fetchAll();
                             <?php if (!$todo['is_done']): ?>
                             <a href="mark_done.php?id=<?= $todo['id'] ?>" class="btn btn-outline-success btn-sm">✔ Terminer</a>
                             <?php endif; ?>
-                            <a href="delete_task.php?id=<?= $todo['id'] ?>" class="btn btn-outline-danger btn-sm">🗑 Supprimer</a>
+                            <a href="delete.php?id=<?= $todo['id'] ?>" class="btn btn-outline-danger btn-sm">🗑 Supprimer</a>
                         </div>
                     </div>
                 </div>
