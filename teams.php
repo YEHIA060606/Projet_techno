@@ -31,6 +31,24 @@ if (isset($_POST['add_user_email'], $_POST['team_id'])) {
     }
 }
 
+// Supprimer une équipe
+if (isset($_POST['delete_team_id'])) {
+    $team_id = $_POST['delete_team_id'];
+
+    // Vérifie que l'équipe appartient à l'utilisateur connecté
+    $stmt = $pdo->prepare("SELECT * FROM teams WHERE id = ? AND owner_id = ?");
+    $stmt->execute([$team_id, $user_id]);
+    if ($stmt->fetch()) {
+        // Supprimer les membres de l'équipe
+        $pdo->prepare("DELETE FROM team_members WHERE team_id = ?")->execute([$team_id]);
+        // Supprimer l'équipe
+        $pdo->prepare("DELETE FROM teams WHERE id = ?")->execute([$team_id]);
+        $message = "🗑️ Équipe supprimée.";
+    } else {
+        $message = "❌ Vous n'avez pas le droit de supprimer cette équipe.";
+    }
+}
+
 // Récupérer les équipes
 $stmt = $pdo->prepare("SELECT * FROM teams WHERE owner_id = ?");
 $stmt->execute([$user_id]);
@@ -86,9 +104,17 @@ $teams = $stmt->fetchAll();
           <input name="add_user_email" class="form-control" placeholder="Email utilisateur">
           <button class="btn btn-outline-primary">Ajouter</button>
         </form>
+
+        <!-- Formulaire de suppression -->
+        <form method="POST" class="mt-2">
+          <input type="hidden" name="delete_team_id" value="<?= $team['id'] ?>">
+          <button class="btn btn-danger w-100" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')">Supprimer</button>
+        </form>
       </div>
     </div>
   <?php endforeach; ?>
   </div>
+</div>
 </body>
 </html>
+

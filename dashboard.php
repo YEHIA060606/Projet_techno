@@ -1,4 +1,3 @@
-
 <?php
 require_once 'includes/auth.php';
 require_once 'includes/db.php';
@@ -6,7 +5,7 @@ include 'includes/navbar.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Récupération des tâches de l'utilisateur (ou des équipes)
+// Récupération des tâches de l'utilisateur
 $stmt = $pdo->prepare("
 SELECT t.*, c.name AS category_name, u.email AS assigned_email
 FROM todos t
@@ -40,11 +39,14 @@ $todos = $stmt->fetchAll();
         .badge-status {
             font-size: 0.9em;
         }
+        form {
+            display: inline;
+        }
     </style>
 </head>
 <body>
 <div class="container py-5">
-    <h2 class="mb-4 text-center ">Tableau de bord - Mes Tâches</h2>
+    <h2 class="mb-4 text-center">Tableau de bord - Mes Tâches</h2>
 
     <?php if (count($todos) === 0): ?>
         <div class="alert alert-warning text-center">Aucune tâche trouvée.</div>
@@ -66,9 +68,19 @@ $todos = $stmt->fetchAll();
                         </p>
                         <div class="d-flex justify-content-between mt-3">
                             <?php if (!$todo['is_done']): ?>
-                            <a href="mark_done.php?id=<?= $todo['id'] ?>" class="btn btn-outline-success btn-sm">✔ Terminer</a>
+                                <form action="done.php" method="POST">
+                                    <input type="hidden" name="task_id" value="<?= $todo['id'] ?>">
+                                    <button type="submit" class="btn btn-outline-success btn-sm">✔ Terminer</button>
+                                </form>
                             <?php endif; ?>
-                            <a href="delete_task.php?id=<?= $todo['id'] ?>" class="btn btn-outline-danger btn-sm">🗑 Supprimer</a>
+<<<<<<< HEAD
+                            <form action="delete_task.php" method="POST">
+                                <input type="hidden" name="task_id" value="<?= $todo['id'] ?>">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">🗑 Supprimer</button>
+                            </form>
+=======
+                            <a href="delete.php?id=<?= $todo['id'] ?>" class="btn btn-outline-danger btn-sm">🗑 Supprimer</a>
+>>>>>>> 55f03f00dca2de2a0e19be5094e22591c9f4ae2e
                         </div>
                     </div>
                 </div>
