@@ -73,10 +73,14 @@ $todos = $stmt->fetchAll();
                                     <button type="submit" class="btn btn-outline-success btn-sm">✔ Terminer</button>
                                 </form>
                             <?php endif; ?>
+<<<<<<< HEAD
                             <form action="delete_task.php" method="POST">
                                 <input type="hidden" name="task_id" value="<?= $todo['id'] ?>">
                                 <button type="submit" class="btn btn-outline-danger btn-sm">🗑 Supprimer</button>
                             </form>
+=======
+                            <a href="delete.php?id=<?= $todo['id'] ?>" class="btn btn-outline-danger btn-sm">🗑 Supprimer</a>
+>>>>>>> 55f03f00dca2de2a0e19be5094e22591c9f4ae2e
                         </div>
                     </div>
                 </div>

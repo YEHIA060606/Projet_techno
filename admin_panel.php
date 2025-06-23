@@ -9,7 +9,7 @@ $stmt->execute([$_SESSION['user_id']]);
 $role = $stmt->fetchColumn();
 if ($role !== 'admin') {
     echo "<div class='container mt-5 alert alert-danger'>Accès refusé. Cette page est réservée à l'administrateur.</div>";
-    exit;
+    exit; 
 }
 
 // Supprimer un utilisateur (sauf admin)
