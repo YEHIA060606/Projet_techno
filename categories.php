@@ -45,3 +45,4 @@ $categories = $cats->fetchAll();
     <?php endforeach; ?>
   </ul>
 </div>
+
