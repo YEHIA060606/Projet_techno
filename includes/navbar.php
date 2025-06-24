@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
   <div class="container">
     <!-- Logo avec redirection selon le rôle -->
     <a class="navbar-brand fw-bold" 
-       href="<?= isset($_SESSION['role']) && $_SESSION['role'] === 'admin' ? 'admin_panel.php' : 'index.php' ?>">
+       href="<?= isset($_SESSION['role']) && $_SESSION['role'] === 'admin' ? '/Projet_techno/admin_panel.php' : '/Projet_techno/index.php' ?>">
         ToDoApp<?= isset($_SESSION['role']) && $_SESSION['role'] === 'admin' ? ' - Admin' : '' ?>
     </a>
 
