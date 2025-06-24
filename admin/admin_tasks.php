@@ -3,6 +3,7 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 include '../includes/navbar.php';
 
+// Vérification du rôle
 $role = $pdo->prepare("SELECT role FROM users WHERE id = ?");
 $role->execute([$_SESSION['user_id']]);
 if ($role->fetchColumn() !== 'admin') exit("Accès refusé.");
@@ -14,11 +15,18 @@ if (isset($_GET['delete'])) {
     exit;
 }
 
+// Récupérer les tâches
 $todos = $pdo->query("SELECT todos.*, users.email FROM todos JOIN users ON todos.user_id = users.id")->fetchAll();
 ?>
 
 <div class="container py-5">
     <h3 class="mb-4">📋 Gestion des tâches</h3>
+
+    <!-- Bouton pour ajouter une tâche -->
+    <a href="/Projet_techno/add_task.php" class="btn btn-primary mb-3">
+        ➕ Ajouter une tâche
+    </a>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover align-middle">
             <thead class="table-dark">
@@ -65,4 +73,3 @@ $todos = $pdo->query("SELECT todos.*, users.email FROM todos JOIN users ON todos
         </table>
     </div>
 </div>
-

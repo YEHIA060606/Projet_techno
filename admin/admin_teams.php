@@ -29,6 +29,14 @@ $teams = $pdo->query("SELECT * FROM teams ORDER BY id ASC")->fetchAll();
 
 <div class="container py-5">
     <h3 class="mb-4">🧑‍🤝‍🧑 Gestion des équipes</h3>
+
+    <!-- Bouton pour aller vers teams.php -->
+    <div class="mb-3">
+        <a href="/Projet_techno/teams.php" class="btn btn-primary">
+            🔍 Voir toutes les équipes
+        </a>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover align-middle">
             <thead class="table-dark">
