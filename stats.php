@@ -35,16 +35,24 @@ while ($row = $stmt->fetch()) {
 <div class="container py-5">
     <h3 class="mb-4 text-center"><i class="bi bi-pie-chart-fill me-2"></i>Statistiques des tâches par catégorie</h3>
 
+    <div class="text-center mb-4">
+<a href="export_pdf.php" class="btn btn-light shadow-sm me-2">
+    <i class="bi bi-file-earmark-pdf-fill text-danger me-1"></i> Exporter en PDF
+</a>
+<a href="export_csv.php" class="btn btn-light shadow-sm">
+    <i class="bi bi-file-earmark-excel-fill text-success me-1"></i> Exporter en Excel
+</a>
+
+    </div>
+
     <?php if ($totalTasks === 0): ?>
         <div class="alert alert-info text-center"><i class="bi bi-info-circle"></i> Aucune tâche enregistrée pour générer des statistiques.</div>
     <?php else: ?>
         <div class="row align-items-center justify-content-center">
-            <!-- Graphique -->
             <div class="col-md-6 mb-4">
                 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
             </div>
 
-            <!-- Légende -->
             <div class="col-md-5">
                 <div class="card shadow-sm">
                     <div class="card-body">

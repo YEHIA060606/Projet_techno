@@ -1,12 +1,15 @@
 <?php
-session_start();
-require_once 'includes/db.php';
+session_start(); // Démarrer la session
+require_once 'includes/db.php'; // Connexion à la base de données
 $errors = [];
 
+// Vérifie si le formulaire est soumis
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"]);
     $password = $_POST["password"];
     $confirm = $_POST["confirm_password"];
+
+    // Validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Email invalide.";
     }
@@ -16,15 +19,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($password !== $confirm) {
         $errors[] = "Les mots de passe ne correspondent pas.";
     }
+
+    // Si aucune erreur, on vérifie si l'email est déjà utilisé
     if (empty($errors)) {
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
+
         if ($stmt->fetch()) {
             $errors[] = "Cet email est déjà utilisé.";
         } else {
+            // Insertion de l'utilisateur
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO users (email, password_hash) VALUES (?, ?)");
             $stmt->execute([$email, $hash]);
+
+            // Connexion automatique
             $_SESSION["user_id"] = $pdo->lastInsertId();
             header("Location: index.php");
             exit;
@@ -45,9 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="card shadow mx-auto" style="max-width: 500px;">
       <div class="card-body">
         <h3 class="card-title mb-4 text-center text-success">Inscription</h3>
+
         <?php if (!empty($errors)): ?>
         <div class="alert alert-danger"><?= implode('<br>', $errors) ?></div>
         <?php endif; ?>
+
         <form method="POST">
           <div class="mb-3">
             <label class="form-label">Email</label>
@@ -63,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           </div>
           <button class="btn btn-success w-100">S'inscrire</button>
         </form>
+
         <p class="text-center mt-3">Déjà un compte ? <a href="login.php">Se connecter</a></p>
       </div>
     </div>
