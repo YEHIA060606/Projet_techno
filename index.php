@@ -1,1 +1,13 @@
-<?php session_start(); if (isset($_SESSION['user_id'])) { header('Location: dashboard.php'); } else { header('Location: login.php'); } exit; ?>
+<?php
+require_once 'includes/auth.php';
+include 'includes/navbar.php';
+
+// Redirection intelligente
+if ($_SESSION['role'] === 'admin') {
+    header('Location: admin/admin_dashboard.php');
+    exit;
+} else {
+    header('Location: dashboard.php');
+    exit;
+}
+?>

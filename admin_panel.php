@@ -45,6 +45,7 @@ $allCats = $pdo->query("SELECT categories.id, categories.name, users.email FROM 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+
 <div class="container py-4">
     <h3 class="mb-4">🎛 Panneau d'administration</h3>
 
@@ -77,7 +78,7 @@ $allCats = $pdo->query("SELECT categories.id, categories.name, users.email FROM 
     </div>
 
     <!-- Liste des utilisateurs -->
-    <h4 class="mb-3">Liste des utilisateurs</h4>
+    <h4 class="mb-3">👥 Liste des utilisateurs</h4>
     <table class="table table-bordered table-hover bg-white">
         <thead class="table-dark">
             <tr>
@@ -136,5 +137,8 @@ $allCats = $pdo->query("SELECT categories.id, categories.name, users.email FROM 
         </tbody>
     </table>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

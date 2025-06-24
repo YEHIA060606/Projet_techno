@@ -6,19 +6,32 @@ $errors = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"]);
     $password = $_POST["password"];
-    $stmt = $pdo->prepare("SELECT id, password_hash FROM users WHERE email = ?");
+
+    // Récupérer l'utilisateur avec son rôle
+    $stmt = $pdo->prepare("SELECT id, password_hash, role FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
+
     if ($user && password_verify($password, $user["password_hash"])) {
+        // Stocker les infos dans la session
         $_SESSION["user_id"] = $user["id"];
-        header("Location: index.php");
-        exit;
+        $_SESSION["role"] = $user["role"];
+
+        // Rediriger selon le rôle
+        if ($user["role"] === 'admin') {
+            header('Location: admin_panel.php');
+            exit;
+        } else {
+            header('Location: index.php');
+            exit;
+        }
     } else {
         $errors[] = "Email ou mot de passe incorrect.";
     }
 }
 ?>
-<!DOCTYPE html> 
+
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -32,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <div class="card-body">
         <h3 class="card-title mb-4 text-center text-primary">Connexion</h3>
         <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger"><?= implode('<br>', $errors) ?></div>
+          <div class="alert alert-danger"><?= implode('<br>', $errors) ?></div>
         <?php endif; ?>
         <form method="POST">
           <div class="mb-3">
