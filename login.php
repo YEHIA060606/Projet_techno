@@ -17,12 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION["user_id"] = $user["id"];
         $_SESSION["role"] = $user["role"];
 
-        // Rediriger selon le rôle
+        // 🔁 Rediriger selon le rôle
         if ($user["role"] === 'admin') {
             header('Location: admin_panel.php');
             exit;
         } else {
-            header('Location: index.php');
+            header('Location: dashboard.php');
             exit;
         }
     } else {
