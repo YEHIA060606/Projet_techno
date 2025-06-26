@@ -31,17 +31,20 @@ if (isset($_POST['add_user_email'], $_POST['team_id'])) {
     }
 }
 
+// Supprimer un membre d'une équipe
+if (isset($_POST['remove_user_id'], $_POST['remove_team_id'])) {
+    $stmt = $pdo->prepare("DELETE FROM team_members WHERE user_id = ? AND team_id = ?");
+    $stmt->execute([$_POST['remove_user_id'], $_POST['remove_team_id']]);
+    $message = "🚫 Membre retiré.";
+}
+
 // Supprimer une équipe
 if (isset($_POST['delete_team_id'])) {
     $team_id = $_POST['delete_team_id'];
-
-    // Vérifie que l'équipe appartient à l'utilisateur connecté
     $stmt = $pdo->prepare("SELECT * FROM teams WHERE id = ? AND owner_id = ?");
     $stmt->execute([$team_id, $user_id]);
     if ($stmt->fetch()) {
-        // Supprimer les membres de l'équipe
         $pdo->prepare("DELETE FROM team_members WHERE team_id = ?")->execute([$team_id]);
-        // Supprimer l'équipe
         $pdo->prepare("DELETE FROM teams WHERE id = ?")->execute([$team_id]);
         $message = "🗑️ Équipe supprimée.";
     } else {
@@ -74,6 +77,9 @@ $teams = $stmt->fetchAll();
         min-width: 300px;
         flex: 0 0 auto;
     }
+    ul {
+        padding-left: 20px;
+    }
   </style>
 </head>
 <body> 
@@ -94,18 +100,29 @@ $teams = $stmt->fetchAll();
         <h6>Membres :</h6>
         <ul>
           <?php
-          $stmt = $pdo->prepare("SELECT u.email FROM team_members tm JOIN users u ON tm.user_id = u.id WHERE tm.team_id = ?");
+          $stmt = $pdo->prepare("SELECT u.id, u.email FROM team_members tm JOIN users u ON tm.user_id = u.id WHERE tm.team_id = ?");
           $stmt->execute([$team['id']]);
-          foreach ($stmt as $member) echo "<li>{$member['email']}</li>";
+          foreach ($stmt as $member):
           ?>
+            <li>
+              <?= htmlspecialchars($member['email']) ?>
+              <?php if ($member['id'] != $user_id): ?>
+                <form method="POST" style="display:inline;">
+                  <input type="hidden" name="remove_user_id" value="<?= $member['id'] ?>">
+                  <input type="hidden" name="remove_team_id" value="<?= $team['id'] ?>">
+                  <button class="btn btn-sm btn-link text-danger" onclick="return confirm('Retirer ce membre ?')">❌</button>
+                </form>
+              <?php endif; ?>
+            </li>
+          <?php endforeach; ?>
         </ul>
+
         <form method="POST" class="input-group mt-3">
           <input type="hidden" name="team_id" value="<?= $team['id'] ?>">
           <input name="add_user_email" class="form-control" placeholder="Email utilisateur">
           <button class="btn btn-outline-primary">Ajouter</button>
         </form>
 
-        <!-- Formulaire de suppression -->
         <form method="POST" class="mt-2">
           <input type="hidden" name="delete_team_id" value="<?= $team['id'] ?>">
           <button class="btn btn-danger w-100" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')">Supprimer</button>
@@ -117,4 +134,3 @@ $teams = $stmt->fetchAll();
 </div>
 </body>
 </html>
-
